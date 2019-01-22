@@ -1,0 +1,58 @@
+#!/bin/bash
+if [ -d "infinitemariobros" ]; then
+    rm -rf infinitemariobros
+fi
+
+if [ -d "dist" ]; then
+    rm -rf dist
+fi   
+
+mkdir infinitemariobros
+mkdir dist
+
+javac -source 1.6 -target 1.6 -d \
+./infinitemariobros \
+./src/ch/idsia/ai/*.java \
+./src/ch/idsia/ai/agents/*.java \
+./src/ch/idsia/ai/agents/human/*.java \
+./src/ch/idsia/ai/ea/*.java \
+./src/ch/idsia/ai/*.java \
+./src/ch/idsia/ai/tasks/*.java \
+./src/ch/idsia/mario/engine/*.java \
+./src/ch/idsia/mario/engine/level/*.java \
+./src/ch/idsia/mario/engine/mapedit/*.java \
+./src/ch/idsia/mario/engine/sprites/*.java \
+./src/ch/idsia/mario/environments/*.java \
+./src/ch/idsia/mario/simulation/*.java \
+./src/ch/idsia/scenarios/*.java \
+./src/ch/idsia/scenarios/test/*.java \
+./src/ch/idsia/tools/*.java \
+./src/ch/idsia/utils/*.java \
+./src/competition/cig/robinbaumgarten/*.java \
+./src/competition/cig/robinbaumgarten/astar/*.java \
+./src/competition/cig/robinbaumgarten/astar/level/*.java \
+./src/competition/cig/robinbaumgarten/astar/sprites/*.java \
+./src/wox/serial/*.java \
+
+
+
+cp -R ./src/ch/idsia/mario/engine/resources/* ./infinitemariobros
+
+#jar cfm infinitemariobros.jar manifest.txt -C ./infinitemariobros .
+#mv infinitemariobros.jar ./dist
+#rm -rf infinitemariobros
+
+echo "#!/bin/bash" > ./dist/infinitemariobros
+echo 'MAINCLASS="com.mojang.mario.FrameLauncher"' >> ./dist/infinitemariobros
+echo 'OPTION=$1"s"' >> ./dist/infinitemariobros
+echo 'if [ "$OPTION" == "fs" ]; then' >> ./dist/infinitemariobros
+echo     'MAINCLASS="com.mojang.mario.FullScreenFrameLauncher"' >> ./dist/infinitemariobros
+echo 'fi' >> ./dist/infinitemariobros
+echo 'java -cp .:infinitemariobros.jar $MAINCLASS' >> ./dist/infinitemariobros
+chmod +x ./dist/infinitemariobros
+chmod +x ./dist/infinitemariobros.jar
+
+
+
+
+
