@@ -1,20 +1,20 @@
 #!/bin/bash
-if [ -d "infinitemariobros" ]; then
-    rm -rf infinitemariobros
+if [ -d "infinittuxai" ]; then
+    rm -rf infinittuxai
 fi
 
 if [ -d "dist" ]; then
     rm -rf dist
 fi   
 
-mkdir infinitemariobros
+mkdir infinittuxai
 mkdir dist
 
-javac -source 1.6 -target 1.6 -d \
-./infinitemariobros \
-./src/ch/idsia/ai/*.java \
-./src/ch/idsia/ai/agents/*.java \
+javac -cp .:./lib/jdom.jar -source 1.6 -target 1.6 -d \
+./infinittuxai \
+./src/ch/idsia/ai/agents/ai/*.java \
 ./src/ch/idsia/ai/agents/human/*.java \
+./src/ch/idsia/ai/agents/*.java \
 ./src/ch/idsia/ai/ea/*.java \
 ./src/ch/idsia/ai/*.java \
 ./src/ch/idsia/ai/tasks/*.java \
@@ -27,30 +27,32 @@ javac -source 1.6 -target 1.6 -d \
 ./src/ch/idsia/scenarios/*.java \
 ./src/ch/idsia/scenarios/test/*.java \
 ./src/ch/idsia/tools/*.java \
+./src/ch/idsia/tools/tcp/*.java \
 ./src/ch/idsia/utils/*.java \
-./src/competition/cig/robinbaumgarten/*.java \
 ./src/competition/cig/robinbaumgarten/astar/*.java \
 ./src/competition/cig/robinbaumgarten/astar/level/*.java \
 ./src/competition/cig/robinbaumgarten/astar/sprites/*.java \
+./src/competition/cig/robinbaumgarten/*.java \
+./src/competition/cig/sergeykarakovskiy/*.java \
 ./src/wox/serial/*.java \
 
 
+mkdir -p ./infinittuxai/ch/idsia/mario/engine/resources
+cp -R ./src/ch/idsia/mario/engine/resources/* ./infinittuxai/ch/idsia/mario/engine/resources
 
-cp -R ./src/ch/idsia/mario/engine/resources/* ./infinitemariobros
+jar cfm infinittuxai.jar manifest.txt -C ./infinittuxai .
+mv infinittuxai.jar ./dist
+rm -rf infinittuxai
 
-#jar cfm infinitemariobros.jar manifest.txt -C ./infinitemariobros .
-#mv infinitemariobros.jar ./dist
-#rm -rf infinitemariobros
-
-echo "#!/bin/bash" > ./dist/infinitemariobros
-echo 'MAINCLASS="com.mojang.mario.FrameLauncher"' >> ./dist/infinitemariobros
-echo 'OPTION=$1"s"' >> ./dist/infinitemariobros
-echo 'if [ "$OPTION" == "fs" ]; then' >> ./dist/infinitemariobros
-echo     'MAINCLASS="com.mojang.mario.FullScreenFrameLauncher"' >> ./dist/infinitemariobros
-echo 'fi' >> ./dist/infinitemariobros
-echo 'java -cp .:infinitemariobros.jar $MAINCLASS' >> ./dist/infinitemariobros
-chmod +x ./dist/infinitemariobros
-chmod +x ./dist/infinitemariobros.jar
+echo "#!/bin/bash" > ./dist/infinittuxai
+echo 'MAINCLASS="ch.idsia.scenarios.Play"' >> ./dist/infinittuxai
+echo 'OPTION=$1"s"' >> ./dist/infinittuxai
+echo 'if [ "$OPTION" == "fs" ]; then' >> ./dist/infinittuxai
+echo     'MAINCLASS="ch.idsia.scenarios.Play"' >> ./dist/infinittuxai
+echo 'fi' >> ./dist/infinittuxai
+echo 'java -cp .:infinittuxai.jar $MAINCLASS' >> ./dist/infinittuxai
+chmod +x ./dist/infinittuxai
+chmod +x ./dist/infinittuxai.jar
 
 
 
